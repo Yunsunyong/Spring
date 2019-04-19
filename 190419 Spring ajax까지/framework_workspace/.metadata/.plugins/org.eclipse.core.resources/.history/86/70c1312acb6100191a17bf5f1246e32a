@@ -1,0 +1,117 @@
+package org.kh.first.member.controller;
+
+import java.io.File;
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.kh.first.member.model.service.MemberService;
+import org.kh.first.member.model.vo.Member;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class MemberController {
+	//MemberService DI
+	@Autowired
+	private MemberService memberService;
+
+	@RequestMapping(value="login.do", method=RequestMethod.POST)
+	public String loginMethod(Member member, HttpSession session, SessionStatus status, Model model) {
+		
+		Member loginMember = memberService.selectLogin(member);
+		/*HttpSession session = request.getSession();*/
+		//메소드 매개변수로 선언하면 자동 생성됨.
+		if(loginMember != null) { //로그인 성공시
+		session.setAttribute("loginMember", loginMember);
+		status.setComplete();	//요청 성공(200번)
+
+		return "home";
+		}else { //로그인 실패시
+			model.addAttribute("message", "로그인 실패!");
+			return "common/error";
+		}
+	}
+	
+	@RequestMapping(value="logout.do")
+	public String logoutMethod(Member member, HttpServletRequest request) {
+		
+		HttpSession session = request.getSession(false); //false 세션을 중복으로 안만들게 하기 위한 방법
+		if(session != null) {
+			session.invalidate();   //세션 없애기
+		}
+		
+		return "home";
+	}
+	
+	@RequestMapping(value="enroll.do")
+	public String moveEnrollPage() {
+		return "member/enrollPage";
+	}
+	
+	@RequestMapping(value="minsert.do", method=RequestMethod.POST)
+	public String insertMember(Model model, Member member, @RequestParam(name="photo", required=false) MultipartFile mphoto, HttpServletRequest request) {
+		/*MultipartFile mphoto =  new MultipartFile(mrequest.getParameter("photo"));*/
+		System.out.println("member : " + member);
+		System.out.println("프로필사진 : " + mphoto);
+		
+		//폴더에 전송온 파일 저장 처리
+		String saveFolder = request.getSession().getServletContext().getRealPath("resources/files/photo");
+		
+		try {
+			mphoto.transferTo(new File(saveFolder + "\\" + mphoto.getOriginalFilename()));
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		if(memberService.insertMember(member) > 0) {
+			return "home";
+		}else {
+			model.addAttribute("message", "회원 가입 실패!!");
+			return "common/error";
+		}
+		
+	}
+	
+	@RequestMapping("myinfo.do")
+	public ModelAndView selectMember(ModelAndView mv,  /*HttpServletRequest request*/  @RequestParam(name="userid") String userid) {
+		/*ModelAndView mv = new ModelAndView();*/
+		/*String userid = request.getParameter("userid");*/
+		
+		Member member = memberService.selectMember(userid);
+		
+		mv.addObject("member", member);
+		//request.setAttribute("member", member);
+		mv.setViewName("member/memberDetailView");
+		return mv;
+	}
+	
+	@RequestMapping("mdel.do")
+	public String memberDelete(Model model, @RequestParam(name="userid") String userid) {
+		int result = memberService.deleteMember(userid);
+		if(result > 0) {
+			return "redirect:logout.do";
+		}else {
+			model.addAttribute("message", "회원 탈퇴 실패!!");
+			return "common/error";
+		}
+	}
+	
+	@RequestMapping("mupview.do")
+	public ModelAndView updateMember(ModelAndView mv, @RequestParam(name="userid") String userid) {
+		
+		
+		return mv;
+	}
+}

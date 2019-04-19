@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis_sample01.CityInfo">
+
+	<resultMap id="cityInfoResult" type="CityInfo">
+		<id property="name" column="Name" />
+		<result property="code" column="CountryCode" />
+	</resultMap>
+	
+	<select id="selectInfo" parameterType="int" resultType="CityInfo" resultMap="cityInfoResult">
+		SELECT * FROM WORLD.CITY WHERE ID = #{ID}
+	</select>
+
+</mapper>

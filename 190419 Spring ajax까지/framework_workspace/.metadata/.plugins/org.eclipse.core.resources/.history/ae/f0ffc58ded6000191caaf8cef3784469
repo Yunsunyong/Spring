@@ -1,0 +1,6 @@
+package org.kh.first.member.model.dao;
+
+@Repository
+public class MemberDao {
+
+}

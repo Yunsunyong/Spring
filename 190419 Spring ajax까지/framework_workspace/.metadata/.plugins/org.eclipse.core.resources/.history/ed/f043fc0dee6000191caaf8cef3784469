@@ -1,0 +1,6 @@
+package org.kh.first.member.model.service;
+
+public interface MemberService {
+	//추상메소드만 멤버로 가짐
+	
+}

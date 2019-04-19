@@ -1,0 +1,116 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>first Ajax</title>
+<!-- 상대경로 사용 -->
+<!-- <script type="text/javascript" src="../../../resources/js/jquery-3.3.1.min.js"></script> -->
+<!-- 절대경로 사용 -->
+<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#test1").on("click", function(){
+		$.ajax({
+			url: "test1.do",
+			data: { name: "박혁거세", age: 33},
+			type: "post",
+			success: function(result){
+				if(result == "ok"){
+					alert("전송 성공!");
+					console.log("result : " + result);
+					$("#d1").html("<h1>" + result + "</h1>");
+				}else {
+					alert("전송 실패!!!");
+				}
+			},
+			error: function(request, status, errorData){
+				console.log("error code : " + request.status
+						+"\nmessage : " + request.responseText
+						+"\nerror : " + errorData);
+			}
+		});
+	});
+	
+	$("#test2").on("click", function(){
+		//test2.do 로부터 json 객체를 리턴받아, div에 출력
+		$.ajax({
+			url: "test2.do",
+			type: "post",
+			dataType: "json",
+			success: function(jsonData){
+				console.log("jsonData : " + jsonData);
+				$("#d2").html("번호 : " + jsonData.no + "<br>제목 : " + decodeURIComponent(jsonData.title.replace(/\+/g, " ")) +
+						"<br>작성자 : " + jsonData.writer + 
+						"<br>내용 : " + decodeURIComponent(jsonData.content.replace(/\+/g, " ")));
+			},
+			error: function(request, status, errorData){
+				console.log("error code : " + request.status
+						+"\nmessage : " + request.responseText
+						+"\nerror : " + errorData);
+			}
+		});
+	});
+	
+	$("#test3").on("click", function(){
+		$.ajax({
+			url: "test3.do",
+			type: "post",
+			dataType: "json",
+			success: function(obj){
+				console.log("obj : " + obj);   //object 라고 출력
+				//배열을 가진 json 객체를 문자열로 변환 처리
+				var objStr = JSON.stringify(obj);
+				//문자열을 json 객체로 변환
+				var jsonObj = JSON.parse(objStr);
+				//출력용 문자열 준비
+				var outValues = $("d3").html();
+				//jsonObj 안의 배열에 대한 반복 처리
+				for(var i in jsonObj.list){
+					outValues += jsonObj.list[i].userid +
+					", " + jsonObj.list[i].userpwd +
+					", " + decodeURIComponent(jsonObj.list[i].username)
+				}
+				
+			},
+			error: function(request, status, errorData){
+				console.log("error code : " + request.status
+						+"\nmessage : " + request.responseText
+						+"\nerror : " + errorData);
+			}
+		});
+	});
+	
+	$("#test4").on("click", function(){});
+	
+	$("#test5").on("click", function(){});
+	
+	$("#test6").on("click", function(){});
+});
+</script>
+</head>
+<body>
+<h1>spring framwork ajax test</h1>
+<ol>
+<li>서버쪽 컨트롤러로 값 보내기 &nbsp;
+<button id="test1">테스트1</button></li>
+<p><div id="d1"></div></p>
+<li>컨트롤러로 부터 json 객체 받아서 출력 &nbsp;
+<button id="test2">테스트2</button></li>
+<p><div id="d2"></div></p>
+<li>컨트롤러로 부터 json 배열 받아서 출력 &nbsp;
+<button id="test3">테스트3</button></li>
+<p><div id="d3"></div></p>
+<li>컨트로러로 부터 맵(Map) 객체 받아서 출력 &nbsp;
+<button id="test4">테스트4</button></li>
+<p><div id="d4"></div></p>
+<li>컨트롤러에 json 객체 보내기 &nbsp;
+<button id="test5">테스트5</button></li>
+<p><div id="d5"></div></p>
+<li>컨트롤러에 json 배열 보내기 &nbsp;
+<button id="test6">테스트6</button></li>
+<p><div id="d6"></div></p>
+</ol>
+</body>
+</html>

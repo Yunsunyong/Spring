@@ -1,0 +1,5 @@
+package org.kh.first.test.model.vo;
+
+public class User implements java.io.Serializable{
+	private static final long serialVersionUID = 153153153L;
+}

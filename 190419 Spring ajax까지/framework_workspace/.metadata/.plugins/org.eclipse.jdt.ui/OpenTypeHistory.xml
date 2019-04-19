@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<typeInfoHistroy>
+<typeInfo handle="=first/src\/main\/java&lt;org.kh.first.member.model.vo{Member.java[Member" modifiers="1" timestamp="1555415097871"/>
+<typeInfo handle="=first/C:\/apache-maven-3.6.1\/repository\/org\/springframework\/spring-web\/5.0.4.RELEASE\/spring-web-5.0.4.RELEASE.jar&lt;org.springframework.web.multipart.commons(CommonsMultipartResolver.class[CommonsMultipartResolver" modifiers="33" timestamp="1555501419609"/>
+<typeInfo handle="=first/C:\/apache-maven-3.6.1\/repository\/net\/sf\/json-lib\/json-lib-ext-spring\/1.0.2\/json-lib-ext-spring-1.0.2.jar&lt;net.sf.json.spring.web.servlet.view(JsonView.class[JsonView" modifiers="33" timestamp="1555501434192"/>
+</typeInfoHistroy>

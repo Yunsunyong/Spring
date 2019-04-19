@@ -1,0 +1,6 @@
+package org.kh.first.test.model.vo;
+
+@
+public class Sample {
+
+}

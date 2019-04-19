@@ -1,0 +1,11 @@
+package org.kh.first.member.model.vo;
+
+public class Member implements java.io.Serializable{
+	private static final long serialVersionUID = 20190416L;
+	
+	private String userid;
+	private String userpwd;
+	private String username;
+	private String gender;
+	private int age;
+}
